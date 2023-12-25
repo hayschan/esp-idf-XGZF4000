@@ -76,7 +76,7 @@ esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_ra
 esp_err_t xgzf4000_new_sensor(const xgzf4000_i2c_config_t *i2c_conf, xgzf4000_dev_handle_t *handle_out)
 {
     ESP_LOGI(TAG, "Initializing XGZF4000 Air Flow Sensor");
-    ESP_LOGI(TAG, "%-15s: %d.%d.%d", CHIP_NAME, AHT20_VER_MAJOR, AHT20_VER_MINOR, AHT20_VER_PATCH);
+    ESP_LOGI(TAG, "%-15s: %d.%d.%d", CHIP_NAME, XGZF4000_VER_MAJOR, XGZF4000_VER_MINOR, XGZF4000_VER_PATCH);
     ESP_LOGI(TAG, "%-15s: %1.1f - %1.1fV", "SUPPLY_VOLTAGE", SUPPLY_VOLTAGE_MIN, SUPPLY_VOLTAGE_MAX);
     ESP_LOGI(TAG, "%-15s: %.2f - %.2f℃", "TEMPERATURE", TEMPERATURE_MIN, TEMPERATURE_MAX);
     ESP_LOGI(TAG, "%-15s: %.2fMPa", "PRESSURE", PRESSURE_MAX);
@@ -96,7 +96,7 @@ esp_err_t xgzf4000_new_sensor(const xgzf4000_i2c_config_t *i2c_conf, xgzf4000_de
 }
 
 
-esp_err_t xgzf4000_del_sensor(aht20_dev_handle_t handle)
+esp_err_t xgzf4000_del_sensor(xgzf4000_dev_handle_t handle)
 {
     ESP_RETURN_ON_FALSE(handle, ESP_ERR_INVALID_ARG, TAG, "invalid device handle pointer");
 
