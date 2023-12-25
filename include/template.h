@@ -1,164 +1,79 @@
-#ifndef TEMPLATE_H_
-#define TEMPLATE_H_
+/*
+ * SPDX-FileCopyrightText: 2023 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*********************
- *      INCLUDES
- *********************/
+#include "esp_types.h"
+#include "esp_err.h"
 
-/*Increase or decrease the included Header file according to the component function*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/queue.h"
-#include "driver/gpio.h"
-#include "esp_log.h"
+#include "driver/i2c.h"
 
-/**********************
- *      TYPEDEFS
- **********************/
+/* AHT20 address: CE pin low - 0x38, CE pin high - 0x39 */
+#define AHT20_ADDRRES_0 (0x38<<1)
+#define AHT20_ADDRESS_1 (0x39<<1)
 
-/** Template Work State.*/
-enum _template_work_state_t {
-    TEMPLATE_WORK_TEXT_LOWER,
-    TEMPLATE_WORK_TEXT_UPPER,
-    TEMPLATE_WORK_SPECIAL,
-    TEMPLATE_WORK_NUMBER,
-    TEMPLATE_WORK_USER_1,
-    TEMPLATE_WORK_USER_2,
-    TEMPLATE_WORK_USER_3,
-    TEMPLATE_WORK_USER_4,
-};
+/**
+ * @brief Type of AHT20 device handle
+ *
+ */
+typedef void *aht20_dev_handle_t;
 
-/** Template  State.*/
-enum _template_mode_t {
-    TEMPLATE_MODE_1,
-    TEMPLATE_MODE_2,
-    TEMPLATE_MODE_3,
-  
-};
-
-/*Data of template*/
+/**
+ * @brief AHT20 I2C config struct
+ *
+ */
 typedef struct {
-    
-    gpio_num_t template_gpio;           /*Pins required for component initialization.
-                                        *Increase pin variables according to the required number of pins and name them in a standardized manner*/
-    unsigned int template_data;        /*The data obtained or set by the component can be increased or decreased according to actual needs*/
-
-    enum _template_work_state_t state;   /*The working mode or state of the component*/
-    
-    enum _template_mode_t mode;
-
-    QueueHandle_t handle_queue_template;
-
-    TaskHandle_t handle_task_template;
-    
-} template_t;
-
-/**********************
- * GLOBAL PROTOTYPES
- **********************/
-
-/*
-    If you want to modify some of the macro definitions you define through menuconfig instead of code editing. 
-    You can read README.md to implement modifications.
-    This part of the content is listed in the table of contents as "about kconfig"
-*/
-
-/*=====================
- * Init functions
- *====================*/
+    i2c_port_t  i2c_port;           /*!< I2C port used to connecte AHT20 device */
+    uint8_t     i2c_addr;           /*!< I2C address of AHT20 device, can be 0x38 or 0x39 according to A0 pin */
+} aht20_i2c_config_t;
 
 /**
- * Initialize the required pins, message queues, and tasks for the component
- * @param template_t *dev  Component structure pointer
- * @param gpio_num_t template_gpio Pin numbers for component settings   
- * @param enum _template_work_state_t mode
- * @return template_t *   
+ * @brief Create new AHT20 device handle.
+ *
+ * @param[in]  i2c_conf Config for I2C used by AHT20
+ * @param[out] handle_out New AHT20 device handle
+ * @return
+ *          - ESP_OK                  Device handle creation success.
+ *          - ESP_ERR_INVALID_ARG     Invalid device handle or argument.
+ *          - ESP_ERR_NO_MEM          Memory allocation failed.
+ *
  */
-
-template_t * example_template_init(template_t *dev,gpio_num_t dev_template_gpio,enum _template_work_state_t dev_mode);
-
-/*=====================
- * Setter functions
- *====================*/
+esp_err_t aht20_new_sensor(const aht20_i2c_config_t *i2c_conf, aht20_dev_handle_t *handle_out);
 
 /**
- * Initialize the required pins, message queues, and tasks for the component
- * @param template_t *dev  Component structure pointer
- * @param QueueHandle_t handle_queue_template   Message queue handle for components
- * @param TaskHandle_t handle_task_template     Message task handle for components
- * @return  esp_err_t  
+ * @brief Delete AHT20 device handle.
+ *
+ * @param[in] handle AHT20 device handle
+ * @return
+ *          - ESP_OK                  Device handle deletion success.
+ *          - ESP_ERR_INVALID_ARG     Invalid device handle or argument.
+ *
  */
-esp_err_t example_template_begin(template_t * dev,QueueHandle_t handle_queue_template,TaskHandle_t handle_task_template);
+esp_err_t aht20_del_sensor(aht20_dev_handle_t handle);
 
 /**
- * Write a data to an address or register in a component.
- * @param  Set the corresponding parameter data type according to the actual situation, such as int
-           Pointer and supported data types
- * @return esp_err_t 
+ * @brief read the temperature and humidity data
+ *
+ * @param[in]  *handle points to an aht20 handle structure
+ * @param[out] *temperature_raw points to a raw temperature buffer
+ * @param[out] *temperature points to a converted temperature buffer
+ * @param[out] *humidity_raw points to a raw humidity buffer
+ * @param[out] *humidity points to a converted humidity buffer
+ *
+ * @return
+ *     - ESP_OK Success
+ *     - ESP_FAIL Fail
  */
-esp_err_t example_template_set_val(int set_data);
-
-
-/**
- * Set the component to what mode
- * @param Control the working mode of selected components and make choices based on actual application scenarios
- * @return esp_err_t 
- */
-esp_err_t example_template_set_mode(enum _template_mode_t template_mode);
-
-
-/*=====================
- * Getter functions
- *====================*/
-
-/**
- * Read out the data obtained from the components.
- * @param template_t *  dev_template
- * @return Calculation data of components
- */
-int example_template_get_data(template_t *  dev_template);
-
-/**
- * Obtain the working status of components.
- * * @param template_t *  dev_template
- * @return enum _template_work_state_t  
- */
-enum _template_work_state_t example_template_get_state(template_t *  dev_template);
-
-/*=====================
- * Other functions
- *====================*/
-
-/**
- * Obtaining data from the message queue of components.
- * @return Obtain the corresponding return value based on the message queue type you created, using int type as an example 
- */
-int read_data_form_template_queue(template_t *dev);
-
-/**
- * Write data to the message queue of components.
- * @return esp_err_t 
- */
-esp_err_t write_data_to_template_queue(template_t *dev,int template_set_val);
-
-/**
- * Create a task that belongs to this component.
- * !!!!The task must not have a return value!!!!
- */
-void template_task(void *arg);
-
-
+esp_err_t aht20_read_temperature_humidity(aht20_dev_handle_t handle,
+                                          uint32_t *temperature_raw, float *temperature,
+                                          uint32_t *humidity_raw, float *humidity);
 #ifdef __cplusplus
-} /*extern "C"*/
+}
 #endif
-
-#endif /*TEMPLATE_H*/
