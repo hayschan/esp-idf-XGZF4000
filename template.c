@@ -73,24 +73,23 @@ esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_ra
 }
 
 
-esp_err_t aht20_new_sensor(const aht20_i2c_config_t *i2c_conf, aht20_dev_handle_t *handle_out)
+esp_err_t xgzf4000_new_sensor(const xgzf4000_i2c_config_t *i2c_conf, xgzf4000_dev_handle_t *handle_out)
 {
-    ESP_LOGI(TAG, "%-15s: %d.%d.%d", CHIP_NAME, AHT20_VER_MAJOR, AHT20_VER_MINOR, AHT20_VER_PATCH);
-    ESP_LOGI(TAG, "%-15s: %1.1f - %1.1fV", "SUPPLY_VOLTAGE", SUPPLY_VOLTAGE_MIN, SUPPLY_VOLTAGE_MAX);
-    ESP_LOGI(TAG, "%-15s: %.2f - %.2f℃", "TEMPERATURE", TEMPERATURE_MIN, TEMPERATURE_MAX);
+    ESP_LOGI(TAG, "Initializing XGZF4000 Air Flow Sensor");
 
     ESP_RETURN_ON_FALSE(i2c_conf, ESP_ERR_INVALID_ARG, TAG, "invalid device config pointer");
     ESP_RETURN_ON_FALSE(handle_out, ESP_ERR_INVALID_ARG, TAG, "invalid device handle pointer");
 
-    aht20_dev_t *handle = calloc(1, sizeof(aht20_dev_t));
+    xgzf4000_dev_t *handle = calloc(1, sizeof(xgzf4000_dev_t));
     ESP_RETURN_ON_FALSE(handle, ESP_ERR_NO_MEM, TAG, "memory allocation for device handler failed");
 
     handle->i2c_port = i2c_conf->i2c_port;
-    handle->i2c_addr = i2c_conf->i2c_addr;
+    handle->i2c_addr = i2c_conf->i2c_addr; // Default I2C address for XGZF4000 is 0x50
 
     *handle_out = handle;
     return ESP_OK;
 }
+
 
 esp_err_t aht20_del_sensor(aht20_dev_handle_t handle)
 {
