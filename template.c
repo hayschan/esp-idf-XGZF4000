@@ -19,73 +19,59 @@ const static char *TAG = "AHT20";
 typedef struct {
     i2c_port_t  i2c_port;
     uint8_t     i2c_addr;
-} aht20_dev_t;
+} xgzf4000_dev_t;
 
-static esp_err_t aht20_read_reg(aht20_dev_handle_t dev, uint8_t *data, size_t len)
+static esp_err_t xgzf4000_read_flow_data(xgzf4000_dev_handle_t dev, uint8_t *data, size_t len)
 {
-    aht20_dev_t *sens = (aht20_dev_t *) dev;
+    xgzf4000_dev_t *sens = (xgzf4000_dev_t *) dev;
     esp_err_t ret;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+
+    // Start I2C communication
     ret = i2c_master_start(cmd);
     assert(ESP_OK == ret);
-    ret = i2c_master_write_byte(cmd, sens->i2c_addr | I2C_MASTER_READ, true);
+
+    // Specify the sensor's I2C address and set read mode
+    ret = i2c_master_write_byte(cmd, sens->i2c_addr << 1 | I2C_MASTER_READ, true);
     assert(ESP_OK == ret);
-    ret = i2c_master_read(cmd, data, len, I2C_MASTER_LAST_NACK);
+
+    // Read the specified number of bytes from the sensor
+    if (len > 1) {
+        ret = i2c_master_read(cmd, data, len - 1, I2C_MASTER_ACK);
+        assert(ESP_OK == ret);
+    }
+    ret = i2c_master_read_byte(cmd, data + len - 1, I2C_MASTER_NACK);
     assert(ESP_OK == ret);
+
+    // Send stop condition
     ret = i2c_master_stop(cmd);
     assert(ESP_OK == ret);
+
+    // Execute the command
     ret = i2c_master_cmd_begin(sens->i2c_port, cmd, 1000 / portTICK_PERIOD_MS);
     i2c_cmd_link_delete(cmd);
 
     return ret;
 }
 
-esp_err_t aht20_read_temperature_humidity(aht20_dev_handle_t handle,
-                                          uint32_t *temperature_raw, float *temperature,
-                                          uint32_t *humidity_raw, float *humidity)
+esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_rate_raw, float *flow_rate)
 {
-    uint8_t status;
-    uint8_t buf[7];
-    uint32_t raw_data;
+    uint8_t buf[2]; // Buffer for reading the two bytes of flow data
 
     ESP_RETURN_ON_FALSE(handle, ESP_ERR_INVALID_ARG, TAG, "invalid device handle pointer");
 
-    buf[0] = 0x33;
-    buf[1] = 0x00;
-    ESP_RETURN_ON_ERROR(aht20_write_reg(handle, AHT20_START_MEASURMENT_CMD, buf, 2), TAG, "I2C read/write error");
+    // Read the flow data from the sensor
+    ESP_RETURN_ON_ERROR(xgzf4000_read_flow_data(handle, buf, 2), TAG, "I2C read/write error");
 
-    vTaskDelay(pdMS_TO_TICKS(100));
+    // Combine the two bytes into a single integer
+    *flow_rate_raw = ((uint32_t)buf[0] << 8) | buf[1];
 
-    ESP_RETURN_ON_ERROR(aht20_read_reg(handle, &status, 1), TAG, "I2C read/write error");
+    // Calculate the actual flow rate using the proportionality factor K
+    *flow_rate = (float)(*flow_rate_raw) / K_FACTOR; // K_FACTOR needs to be defined based on sensor range
 
-    if ((status & BIT(AT581X_STATUS_Calibration_Enable)) &&
-            (status & BIT(AT581X_STATUS_CRC_FLAG)) &&
-            ((status & BIT(AT581X_STATUS_BUSY_INDICATION)) == 0)) {
-        ESP_RETURN_ON_ERROR(aht20_read_reg(handle, buf, 7), TAG, "I2C read/write error");
-        ESP_RETURN_ON_ERROR((aht20_calc_crc(buf, 6) != buf[6]), TAG, "crc is error");
-
-        raw_data = buf[1];
-        raw_data = raw_data << 8;
-        raw_data += buf[2];
-        raw_data = raw_data << 8;
-        raw_data += buf[3];
-        raw_data = raw_data >> 4;
-        *humidity_raw = raw_data;
-        *humidity = (float)raw_data * 100 / 1048576;
-
-        raw_data = buf[3] & 0x0F;
-        raw_data = raw_data << 8;
-        raw_data += buf[4];
-        raw_data = raw_data << 8;
-        raw_data += buf[5];
-        *temperature_raw = raw_data;
-        *temperature = (float)raw_data * 200 / 1048576 - 50;
-        return ESP_OK;
-    } else {
-        ESP_LOGI(TAG, "data is not ready");
-        return ESP_ERR_NOT_FINISHED;
-    }
+    return ESP_OK;
 }
+
 
 esp_err_t aht20_new_sensor(const aht20_i2c_config_t *i2c_conf, aht20_dev_handle_t *handle_out)
 {
