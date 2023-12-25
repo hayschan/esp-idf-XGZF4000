@@ -15,10 +15,6 @@ extern "C" {
 
 #include "driver/i2c.h"
 
-/* XGZF4000 address: CE pin low - 0x38, CE pin high - 0x39 */
-#define XGZF4000_ADDRRES_0 (0x38<<1)
-#define XGZF4000_ADDRESS_1 (0x39<<1)
-
 /**
  * @brief Type of XGZF4000 device handle
  *
@@ -59,19 +55,18 @@ esp_err_t xgzf4000_new_sensor(const xgzf4000_i2c_config_t *i2c_conf, xgzf4000_de
 esp_err_t xgzf4000_del_sensor(xgzf4000_dev_handle_t handle);
 
 /**
- * @brief read the temperature and humidity data
+ * @brief Read the air flow rate data from the XGZF4000 sensor
  *
- * @param[in]  *handle points to an xgzf4000 handle structure
- * @param[out] *temperature_raw points to a raw temperature buffer
- * @param[out] *temperature points to a converted temperature buffer
- * @param[out] *humidity_raw points to a raw humidity buffer
- * @param[out] *humidity points to a converted humidity buffer
+ * @param[in]  *handle points to an XGZF4000 handle structure
+ * @param[out] *flow_rate_raw points to a buffer where the raw flow rate data will be stored
+ * @param[out] *flow_rate points to a buffer where the calculated flow rate (in litres/minute) will be stored
  *
  * @return
- *     - ESP_OK Success
- *     - ESP_FAIL Fail
+ *     - ESP_OK on successful reading of the flow rate data
+ *     - ESP_FAIL on failure to read the flow rate data
  */
-static esp_err_t xgzf4000_read_flow_data(xgzf4000_dev_handle_t dev, uint8_t *data, size_t len)
+esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_rate_raw, float *flow_rate)
+
 
 #ifdef __cplusplus
 }
