@@ -1,23 +1,19 @@
-#  组件的模板 
+[![Component Registry](https://components.espressif.com/components/espressif/xgzf4000/badge.svg)](https://components.espressif.com/components/espressif/xgzf4000)
 
+| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C6 | ESP32-H2 | ESP32-S2 | ESP32-S3 |
+| ----------------- | ----- | -------- | -------- | -------- | -------- | -------- | -------- |
 
-###### 组件的功能函数
-1. 功能函数的编辑写入到 template.c中
-2. 功能函数的声明放到include文件下 
+# Component: XGZF4000
+I2C driver and definition for XGZF4000 air flow sensor.
 
-######  Kconfig
-1. 组件的Konfig放到根目录下
+See [XGZF4000 online datasheet](https://cfsensor.com/wp-content/uploads/2022/11/XGZF4000-Air-Flow-Sensor-V2.2.pdf).
 
-######  测试样例
-1. 测试样例写入到examples/default_example 
-2. 测试的话将examples/default_example单独作为一个工程来进行测试
+In addition to the online version of the XGZF4000 Air Flow Sensor datasheet, an [archived copy](.docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf) is also available within the repository. This archived version can be found at the location `.docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf`. This ensures that users have access to the datasheet even in offline scenarios or if the online version becomes unavailable.
 
-###### 根目录CMakeLists
-1. 要将对应的template.c改成对应的xxxx.c
-````c
-SRCS "template.c"         # list the source files of
-``````
+## Operation modes
+New data from XGZF4000 can be obtained in Polling modes.
 
-````c
-SRCS "xxxx.c"         # list the source files of
-``````
+> Note: The user is responsible for initialization and configuration of I2C bus.
+
+### Polling mode
+After calling `xgzf4000_new_sensor()`, the user is responsible for periodically reading the air flow data from XGZF4000.
