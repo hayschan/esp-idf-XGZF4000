@@ -1,5 +1,9 @@
 idf_component_register(
-    SRCS "template.c"         # list the source files of this component
-    INCLUDE_DIRS "./include"        # optional, add here public include directories
-    REQUIRES driver         # optional, list the public requirements (component names)
+    SRCS "xgzf4000.c"
+    INCLUDE_DIRS "include"
+    PRIV_INCLUDE_DIRS "priv_include"
+    REQUIRES "driver"
 )
+
+include(package_manager)
+cu_pkg_define_version(${CMAKE_CURRENT_LIST_DIR})
