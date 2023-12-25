@@ -8,7 +8,7 @@ I2C driver and definition for XGZF4000 air flow sensor.
 
 See [XGZF4000 online datasheet](https://cfsensor.com/wp-content/uploads/2022/11/XGZF4000-Air-Flow-Sensor-V2.2.pdf).
 
-In addition to the online version of the XGZF4000 Air Flow Sensor datasheet, an [archived copy](.docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf) is also available within the repository. This archived version can be found at the location `.docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf`. This ensures that users have access to the datasheet even in offline scenarios or if the online version becomes unavailable.
+In addition to the online version of the XGZF4000 Air Flow Sensor datasheet, an [archived copy](/docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf) is also available within the repository. This archived version can be found at the location `.docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf`. This ensures that users have access to the datasheet even in offline scenarios or if the online version becomes unavailable.
 
 ## Operation modes
 New data from XGZF4000 can be obtained in Polling modes.
