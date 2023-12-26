@@ -10,20 +10,12 @@
     ],
     "controls": [
         {
-          "id": "flowRate",
+          "id": "airFlowRate",
           "label": "XGZF4000 Gas Air Flow Rate",
           "type": "range",
           "min": 10,
           "max": 50,
           "step": 1
-        },
-        {
-            "id": "K factor",
-            "label": "XGZF4000 K Factor (check datasheet)",
-            "type": "range",
-            "min": 100,
-            "max": 1000,
-            "step": 900
         }
     ]
 }
