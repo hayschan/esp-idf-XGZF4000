@@ -8,10 +8,19 @@ See [XGZF4000 online datasheet](https://cfsensor.com/wp-content/uploads/2022/11/
 
 In addition to the online version of the XGZF4000 Air Flow Sensor datasheet, an [archived copy](/docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf) is also available within the repository. This archived version can be found at the location `./docs/XGZF4000-Air-Flow-Sensor-V2.2.pdf`. This ensures that users have access to the datasheet even in offline scenarios or if the online version becomes unavailable.
 
-## Operation modes
+## Using the driver
+
+### Operation modes
 New data from XGZF4000 can be obtained in Polling modes.
 
 > Note: The user is responsible for initialization and configuration of I2C bus.
 
-### Polling mode
 After calling `xgzf4000_new_sensor()`, the user is responsible for periodically reading the air flow data from XGZF4000.
+
+## Simulator
+
+To simulate this project, install [Wokwi for VS Code](https://marketplace.visualstudio.com/items?itemName=wokwi.wokwi-vscode). Open the project (at `./simulation`) directory in Visual Studio Code, press **F1** and select "Wokwi: Start Simulator".
+
+> Please note that Wokwi for VS Code is a commercial product and requires a license after a free trial period.
+
+You may also use the online Wokwi simulator with [this sample project](https://wokwi.com/projects/385249858064235521).
