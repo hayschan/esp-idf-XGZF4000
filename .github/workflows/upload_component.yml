@@ -18,5 +18,5 @@ jobs:
           version: ${{ github.ref_name }}
           namespace: "hayschan"
           api_token: ${{ secrets.IDF_COMPONENT_API_TOKEN }}
-          skip_pre_release: false
-          dry_run: true
+          skip_pre_release: true
+          dry_run: false
