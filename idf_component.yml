@@ -1,4 +1,5 @@
-version: 0.9.0
+version: "0.9.1"
+license: "MIT"
 description: I2C driver for XGZF4000 air flow sensor
 url: https://github.com/hayschan/esp-idf-XGZF4000/tree/main
 dependencies:
