@@ -1,3 +1,15 @@
+/*
+ * File: xgzf4000.chip.c
+ * Author: Hays Chan
+ * Year: 2023
+ *
+ * This file is part of the XGZF4000 Air Flow Sensor Driver project.
+ *
+ * SPDX-FileCopyrightText: 2023 Hays Chan
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "wokwi-api.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +27,7 @@ typedef struct {
 static bool on_i2c_connect(void *user_data, uint32_t address, bool connect);
 static uint8_t on_i2c_read(void *user_data);
 static void on_i2c_disconnect(void *user_data);
+// no need to implement on_i2c_write(), it's not used by the gas air flow sensor
 
 void chip_init() {
   chip_state_t *chip = malloc(sizeof(chip_state_t));
@@ -28,7 +41,7 @@ void chip_init() {
     .sda = pin_init("SDA", INPUT),
     .connect = on_i2c_connect,
     .read = on_i2c_read,
-    .disconnect = on_i2c_disconnect, // Optional
+    .disconnect = on_i2c_disconnect,
   };
   i2c_init(&i2c_config);
 

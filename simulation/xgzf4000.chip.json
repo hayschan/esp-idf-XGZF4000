@@ -16,6 +16,14 @@
           "min": 10,
           "max": 50,
           "step": 1
+        },
+        {
+          "id": "K value",
+          "label": "XGZF4000 K value",
+          "type": "range",
+          "min": 100,
+          "max": 1000,
+          "step": 900
         }
     ]
 }

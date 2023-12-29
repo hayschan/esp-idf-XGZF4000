@@ -1,7 +1,13 @@
 /*
- * SPDX-FileCopyrightText: 2023 Espressif Systems (Shanghai) CO LTD
+ * File: xgzf4000.c
+ * Author: Hays Chan
+ * Year: 2023
  *
- * SPDX-License-Identifier: Apache-2.0
+ * This file is part of the XGZF4000 Air Flow Sensor Driver project.
+ *
+ * SPDX-FileCopyrightText: 2023 Hays Chan
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 #pragma once

@@ -2,6 +2,15 @@
     "version": 1,
     "author": "Hays Chan",
     "editor": "wokwi",
-    "parts": [],
-    "connections": []
-}
+    "parts": [
+      { "type": "wokwi-arduino-uno", "id": "uno", "top": 6.67, "left": 36, "attrs": {} },
+      { "type": "chip-xgzf4000", "id": "chip1", "top": 308.22, "left": 168, "attrs": {} }
+    ],
+    "connections": [
+      [ "chip1:VCC", "uno:5V", "red", [ "h59.41", "v-38.4", "h-140" ] ],
+      [ "chip1:GND", "uno:GND.2", "black", [ "h-38.4", "v-76.8", "h71.1" ] ],
+      [ "chip1:SDA", "uno:A4", "purple", [ "h78.61", "v-96", "h-73.2" ] ],
+      [ "chip1:SCL", "uno:A5", "orange", [ "h-48", "v-67.2", "h166.7" ] ]
+    ],
+    "dependencies": {}
+  }

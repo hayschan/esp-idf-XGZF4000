@@ -1,5 +1,17 @@
+/*
+ * File: xgzf4000-gas-flow-sensor-i2c-example.ino
+ * Author: Hays Chan
+ * Year: 2023
+ *
+ * This file is part of the XGZF4000 Air Flow Sensor Driver project.
+ *
+ * SPDX-FileCopyrightText: 2023 Hays Chan
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 // Custom chips playground
-// See https://link.wokwi.com/custom-chips-alpha for more info
+// See https://docs.wokwi.com/chips-api/getting-started for more info
 
 #include <Wire.h>
 
