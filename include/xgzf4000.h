@@ -71,8 +71,7 @@ esp_err_t xgzf4000_del_sensor(xgzf4000_dev_handle_t handle);
  *     - ESP_OK on successful reading of the flow rate data
  *     - ESP_FAIL on failure to read the flow rate data
  */
-esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_rate_raw, float *flow_rate)
-
+esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_rate_raw, float *flow_rate);
 
 #ifdef __cplusplus
 }

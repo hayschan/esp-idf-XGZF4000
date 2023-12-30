@@ -1,7 +1,13 @@
 /*
- * SPDX-FileCopyrightText: 2023 Espressif Systems (Shanghai) CO LTD
+ * File: xgzf4000.c
+ * Author: Hays Chan
+ * Year: 2023
  *
- * SPDX-License-Identifier: Apache-2.0
+ * This file is part of the XGZF4000 Air Flow Sensor Driver project.
+ *
+ * SPDX-FileCopyrightText: 2023 Hays Chan
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 #include <inttypes.h>
@@ -13,6 +19,8 @@
 #include "esp_check.h"
 
 #include "xgzf4000_reg.h"
+
+#define K_FACTOR 1000 // Proportionality factor for converting raw flow data to actual flow rate, either 1000 or 1000
 
 const static char *TAG = "XGZF4000";
 
@@ -72,11 +80,23 @@ esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_ra
     return ESP_OK;
 }
 
+esp_err_t adafruit_stemma_soil_sensor_init(i2c_port_t i2c_num, int sda_pin, int scl_pin)
+{
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = sda_pin;
+    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.scl_io_num = scl_pin;
+    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
+    conf.clk_flags = 0;
+    i2c_param_config(i2c_num, &conf);
+    return i2c_driver_install(i2c_num, conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
+}
 
-esp_err_t xgzf4000_new_sensor(const xgzf4000_i2c_config_t *i2c_conf, xgzf4000_dev_handle_t *handle_out)
+esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
 {
     ESP_LOGI(TAG, "Initializing XGZF4000 Air Flow Sensor");
-    ESP_LOGI(TAG, "%-15s: %d.%d.%d", CHIP_NAME, XGZF4000_VER_MAJOR, XGZF4000_VER_MINOR, XGZF4000_VER_PATCH);
     ESP_LOGI(TAG, "%-15s: %1.1f - %1.1fV", "SUPPLY_VOLTAGE", SUPPLY_VOLTAGE_MIN, SUPPLY_VOLTAGE_MAX);
     ESP_LOGI(TAG, "%-15s: %.2f - %.2f℃", "TEMPERATURE", TEMPERATURE_MIN, TEMPERATURE_MAX);
     ESP_LOGI(TAG, "%-15s: %.2fMPa", "PRESSURE", PRESSURE_MAX);
