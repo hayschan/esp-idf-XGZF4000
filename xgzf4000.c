@@ -19,6 +19,10 @@
 #include "xgzf4000.h"
 #include "xgzf4000_reg.h"
 
+#define I2C_MASTER_FREQ_HZ   100000 // I2C master frequency
+#define I2C_MASTER_RX_BUF_DISABLE 0
+#define I2C_MASTER_TX_BUF_DISABLE 0
+
 #define K_FACTOR 1000 // Proportionality factor for converting raw flow data to actual flow rate, either 1000 or 1000
 
 static esp_err_t xgzf4000_read_flow_data(xgzf4000_dev_handle_t dev, uint8_t *data, size_t len)
