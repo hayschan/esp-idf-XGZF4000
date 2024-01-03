@@ -1,0 +1,43 @@
+name: Compile ESP-IDF Sketches for v5.1
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/espidf-compile-*.yml"
+      - "examples/**"
+      - "include/**"
+      - "priv_include/**"
+      - "*.c"
+      - "CMakeLists.txt"
+      - "Kconfig"
+      - "idf_component.yml"
+
+  push:
+    paths:
+      - ".github/workflows/espidf-compile-*.yml"
+      - "examples/**"
+      - "include/**"
+      - "priv_include/**"
+      - "*.c"
+      - "CMakeLists.txt"
+      - "Kconfig"
+      - "idf_component.yml"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Build default data polling example on v5.1
+      uses: espressif/esp-idf-ci-action@v1
+      with:
+        esp_idf_version: v5.1
+        target: esp32s3
+        path: 'examples/default_example'
