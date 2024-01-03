@@ -45,10 +45,10 @@ void app_main(void) {
     ESP_ERROR_CHECK(xgzf4000_new_sensor(I2C_MASTER_NUM, I2C_MASTER_SDA_IO, I2C_MASTER_SCL_IO));
 
 
-    if (init_xgzf4000_sensor() != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to initialize XGZF4000 sensor");
-        return;
-    }
+    // if (init_xgzf4000_sensor() != ESP_OK) {
+    //     ESP_LOGE(TAG_XGZF, "Failed to initialize XGZF4000 sensor");
+    //     return;
+    // }
 
     while (1) {
         poll_air_flow_data();
