@@ -39,7 +39,7 @@ typedef struct {
 } xgzf4000_i2c_config_t;
 
 
-esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
+esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin);
 
 /**
  * @brief Delete XGZF4000 device handle.
