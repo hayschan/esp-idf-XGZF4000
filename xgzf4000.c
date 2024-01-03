@@ -80,7 +80,7 @@ esp_err_t xgzf4000_read_air_flow(xgzf4000_dev_handle_t handle, uint32_t *flow_ra
     return ESP_OK;
 }
 
-esp_err_t adafruit_stemma_soil_sensor_init(i2c_port_t i2c_num, int sda_pin, int scl_pin)
+esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
 {
     i2c_config_t conf;
     conf.mode = I2C_MODE_MASTER;
@@ -94,26 +94,26 @@ esp_err_t adafruit_stemma_soil_sensor_init(i2c_port_t i2c_num, int sda_pin, int 
     return i2c_driver_install(i2c_num, conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
 }
 
-esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
-{
-    ESP_LOGI(TAG, "Initializing XGZF4000 Air Flow Sensor");
-    ESP_LOGI(TAG, "%-15s: %1.1f - %1.1fV", "SUPPLY_VOLTAGE", SUPPLY_VOLTAGE_MIN, SUPPLY_VOLTAGE_MAX);
-    ESP_LOGI(TAG, "%-15s: %.2f - %.2f℃", "TEMPERATURE", TEMPERATURE_MIN, TEMPERATURE_MAX);
-    ESP_LOGI(TAG, "%-15s: %.2fMPa", "PRESSURE", PRESSURE_MAX);
+// esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
+// {
+//     ESP_LOGI(TAG, "Initializing XGZF4000 Air Flow Sensor");
+//     ESP_LOGI(TAG, "%-15s: %1.1f - %1.1fV", "SUPPLY_VOLTAGE", SUPPLY_VOLTAGE_MIN, SUPPLY_VOLTAGE_MAX);
+//     ESP_LOGI(TAG, "%-15s: %.2f - %.2f℃", "TEMPERATURE", TEMPERATURE_MIN, TEMPERATURE_MAX);
+//     ESP_LOGI(TAG, "%-15s: %.2fMPa", "PRESSURE", PRESSURE_MAX);
 
 
-    ESP_RETURN_ON_FALSE(i2c_conf, ESP_ERR_INVALID_ARG, TAG, "invalid device config pointer");
-    ESP_RETURN_ON_FALSE(handle_out, ESP_ERR_INVALID_ARG, TAG, "invalid device handle pointer");
+//     ESP_RETURN_ON_FALSE(i2c_conf, ESP_ERR_INVALID_ARG, TAG, "invalid device config pointer");
+//     ESP_RETURN_ON_FALSE(handle_out, ESP_ERR_INVALID_ARG, TAG, "invalid device handle pointer");
 
-    xgzf4000_dev_t *handle = calloc(1, sizeof(xgzf4000_dev_t));
-    ESP_RETURN_ON_FALSE(handle, ESP_ERR_NO_MEM, TAG, "memory allocation for device handler failed");
+//     xgzf4000_dev_t *handle = calloc(1, sizeof(xgzf4000_dev_t));
+//     ESP_RETURN_ON_FALSE(handle, ESP_ERR_NO_MEM, TAG, "memory allocation for device handler failed");
 
-    handle->i2c_port = i2c_conf->i2c_port;
-    handle->i2c_addr = i2c_conf->i2c_addr; // Default I2C address for XGZF4000 is 0x50
+//     handle->i2c_port = i2c_conf->i2c_port;
+//     handle->i2c_addr = i2c_conf->i2c_addr; // Default I2C address for XGZF4000 is 0x50
 
-    *handle_out = handle;
-    return ESP_OK;
-}
+//     *handle_out = handle;
+//     return ESP_OK;
+// }
 
 
 esp_err_t xgzf4000_del_sensor(xgzf4000_dev_handle_t handle)

@@ -36,18 +36,8 @@ typedef struct {
     uint8_t     i2c_addr;           /*!< I2C address of XGZF4000 device, can be 0x38 or 0x39 according to A0 pin */
 } xgzf4000_i2c_config_t;
 
-/**
- * @brief Create new XGZF4000 device handle.
- *
- * @param[in]  i2c_conf Config for I2C used by XGZF4000
- * @param[out] handle_out New XGZF4000 device handle
- * @return
- *          - ESP_OK                  Device handle creation success.
- *          - ESP_ERR_INVALID_ARG     Invalid device handle or argument.
- *          - ESP_ERR_NO_MEM          Memory allocation failed.
- *
- */
-esp_err_t xgzf4000_new_sensor(const xgzf4000_i2c_config_t *i2c_conf, xgzf4000_dev_handle_t *handle_out);
+
+esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
 
 /**
  * @brief Delete XGZF4000 device handle.
