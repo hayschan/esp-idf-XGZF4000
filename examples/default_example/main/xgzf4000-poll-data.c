@@ -42,7 +42,7 @@ void app_main(void) {
         .i2c_addr = I2C_XGZF4000_ADDR,
     };
 
-    ESP_ERROR_CHECK(xgzf4000_new_sensor(I2C_MASTER_NUM, I2C_SDA_PIN, I2C_SCL_PIN));
+    ESP_ERROR_CHECK(xgzf4000_new_sensor(I2C_MASTER_NUM, I2C_MASTER_SDA_IO, I2C_MASTER_SCL_IO));
 
 
     if (init_xgzf4000_sensor() != ESP_OK) {
