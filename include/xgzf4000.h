@@ -21,6 +21,8 @@ extern "C" {
 
 #include "driver/i2c.h"
 
+const static char *TAG = "XGZF4000";
+
 /**
  * @brief Type of XGZF4000 device handle
  *

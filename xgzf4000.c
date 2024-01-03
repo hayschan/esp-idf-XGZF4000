@@ -11,49 +11,36 @@
  */
 
 #include <inttypes.h>
-#include <stdio.h>
 #include <string.h>
-#include "xgzf4000.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "esp_check.h"
 
+#include "xgzf4000.h"
 #include "xgzf4000_reg.h"
 
 #define K_FACTOR 1000 // Proportionality factor for converting raw flow data to actual flow rate, either 1000 or 1000
 
-const static char *TAG = "XGZF4000";
-
-typedef struct {
-    i2c_port_t  i2c_port;
-    uint8_t     i2c_addr;
-} xgzf4000_dev_t;
-
 static esp_err_t xgzf4000_read_flow_data(xgzf4000_dev_handle_t dev, uint8_t *data, size_t len)
 {
-    xgzf4000_dev_t *sens = (xgzf4000_dev_t *) dev;
+    xgzf4000_i2c_config_t *sens = (xgzf4000_i2c_config_t *) dev;
     esp_err_t ret;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 
     // Start I2C communication
     ret = i2c_master_start(cmd);
-    assert(ESP_OK == ret);
 
     // Specify the sensor's I2C address and set read mode
     ret = i2c_master_write_byte(cmd, sens->i2c_addr << 1 | I2C_MASTER_READ, true);
-    assert(ESP_OK == ret);
 
     // Read the specified number of bytes from the sensor
     if (len > 1) {
         ret = i2c_master_read(cmd, data, len - 1, I2C_MASTER_ACK);
-        assert(ESP_OK == ret);
     }
     ret = i2c_master_read_byte(cmd, data + len - 1, I2C_MASTER_NACK);
-    assert(ESP_OK == ret);
 
     // Send stop condition
     ret = i2c_master_stop(cmd);
-    assert(ESP_OK == ret);
 
     // Execute the command
     ret = i2c_master_cmd_begin(sens->i2c_port, cmd, 1000 / portTICK_PERIOD_MS);
@@ -105,7 +92,7 @@ esp_err_t xgzf4000_new_sensor(i2c_port_t i2c_num, int sda_pin, int scl_pin)
 //     ESP_RETURN_ON_FALSE(i2c_conf, ESP_ERR_INVALID_ARG, TAG, "invalid device config pointer");
 //     ESP_RETURN_ON_FALSE(handle_out, ESP_ERR_INVALID_ARG, TAG, "invalid device handle pointer");
 
-//     xgzf4000_dev_t *handle = calloc(1, sizeof(xgzf4000_dev_t));
+//     xgzf4000_i2c_config_t *handle = calloc(1, sizeof(xgzf4000_i2c_config_t));
 //     ESP_RETURN_ON_FALSE(handle, ESP_ERR_NO_MEM, TAG, "memory allocation for device handler failed");
 
 //     handle->i2c_port = i2c_conf->i2c_port;
