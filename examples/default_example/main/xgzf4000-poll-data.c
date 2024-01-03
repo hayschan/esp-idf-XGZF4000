@@ -1,7 +1,7 @@
 #include "esp_log.h"
 #include "xgzf4000.h"
 
-static const char *TAG = "XGZF4000_APP";
+static const char *TAG_XGZF = "XGZF4000_APP";
 
 #define I2C_XGZF4000_ADDR 0x50 // default I2C address of the XGZF4000 sensor
 #define I2C_MASTER_SCL_IO    19    // Assign the SCL pin number
@@ -25,12 +25,12 @@ static void poll_air_flow_data(void) {
 
         // Log the flow rate in the selected unit
         #ifdef CONFIG_FLOW_RATE_UNIT_LMIN
-        ESP_LOGI(TAG, "Raw Flow Rate: %u, Flow Rate: %.2f L/min", flow_rate_raw, flow_rate);
+        ESP_LOGI(TAG_XGZF, "Raw Flow Rate: %u, Flow Rate: %.2f L/min", flow_rate_raw, flow_rate);
         #elif CONFIG_FLOW_RATE_UNIT_CMH
-        ESP_LOGI(TAG, "Raw Flow Rate: %u, Flow Rate: %.2f m³/h", flow_rate_raw, flow_rate);
+        ESP_LOGI(TAG_XGZF, "Raw Flow Rate: %u, Flow Rate: %.2f m³/h", flow_rate_raw, flow_rate);
         #endif
     } else {
-        ESP_LOGE(TAG, "Failed to read air flow data");
+        ESP_LOGE(TAG_XGZF, "Failed to read air flow data");
     }
 }
 
@@ -42,13 +42,13 @@ void app_main(void) {
         .i2c_addr = I2C_XGZF4000_ADDR,
     };
 
-    ESP_ERROR_CHECK(xgzf4000_new_sensor(I2C_MASTER_NUM, I2C_SDA_PIN, I2C_SCL_PIN));
+    ESP_ERROR_CHECK(xgzf4000_new_sensor(I2C_MASTER_NUM, I2C_MASTER_SDA_IO, I2C_MASTER_SCL_IO));
 
 
-    if (init_xgzf4000_sensor() != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to initialize XGZF4000 sensor");
-        return;
-    }
+    // if (init_xgzf4000_sensor() != ESP_OK) {
+    //     ESP_LOGE(TAG_XGZF, "Failed to initialize XGZF4000 sensor");
+    //     return;
+    // }
 
     while (1) {
         poll_air_flow_data();
