@@ -3,9 +3,7 @@
 
 # Component: XGZF4000
 
-<a href="https://components.espressif.com/components/hayschan/xgzf4000">
-<img src="https://components.espressif.com/components/hayschan/xgzf4000/badge.svg" alt="hayschan/xgzf4000 Version: 0.9.3" />
-</a>
+[![Component Registry](https://components.espressif.com/components/hayschan/xgzf4000/badge.svg)](https://components.espressif.com/components/hayschan/xgzf4000)
 
 I2C driver and definition for XGZF4000 air flow sensor.
 
