@@ -1,3 +1,0 @@
-idf_component_register(SRCS "xgzf4000-poll-data.c"   
-                    INCLUDE_DIRS "."   )
-                    
