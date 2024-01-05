@@ -1,4 +1,4 @@
 dependencies:
-  hayschan/esp-idf-xgzf4000:
+  hayschan/esp-idf-XGZF4000:
     version: "*"
     override_path: '../../../'
