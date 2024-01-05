@@ -6,4 +6,4 @@ cmake_minimum_required(VERSION 3.16)
 
 set(COMPONENTS main)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(xgzf4000-default-example)
+project(xgzf4000-example)
