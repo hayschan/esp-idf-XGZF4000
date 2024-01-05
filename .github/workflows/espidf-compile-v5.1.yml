@@ -40,4 +40,4 @@ jobs:
       with:
         esp_idf_version: v5.1
         target: esp32s3
-        path: 'examples/default_example'
+        path: 'examples/xgzf4000-example'
