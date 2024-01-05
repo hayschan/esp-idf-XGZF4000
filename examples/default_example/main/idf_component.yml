@@ -1,0 +1,4 @@
+dependencies:
+  hayschan/xgzf4000:
+    version: "*"
+    override_path: '../../../'
